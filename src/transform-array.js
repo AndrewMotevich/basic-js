@@ -13,9 +13,45 @@ const { NotImplementedError } = require('../extensions/index.js');
  * transform([1, 2, 3, '--discard-prev', 4, 5]) => [1, 2, 4, 5]
  * 
  */
-function transform(/* arr */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+ function transform(arr) {
+  // throw new NotImplementedError('Not implemented');
+  let result = arr;
+  if (!(arr instanceof Array)) throw new Error('\'arr\' parameter must be an instance of the Array!');
+  if (arr[0] === '--double-prev' || arr[0] === '--discard-prev'){
+    result.shift();
+  }
+  if (arr[arr.length - 1] === '--double-next' || arr[arr.length - 1] === '--discard-next'){
+    result.pop();
+  }
+  for (let i = 0; i < arr.length; i += 1){
+    //first
+    if (result[i] == '--double-next'){
+      if (typeof(result[i+1]) == 'number'){
+        result = [].concat(result.slice(0, i-1), result[i-1], result[i+1], result.slice(i+1));
+      }
+    }
+    //second
+    if (result[i] == '--double-prev'){
+      if (typeof(result[i-1]) == 'number'){
+        result = [].concat(result.slice(0, i-1), result[i-1], result[i-1], result.slice(i+1));
+      }
+    }
+    //third
+    if (result[i] == '--discard-next'){
+      if (typeof(result[i+1]) == 'number'){
+        result = [].concat(result.slice(0, i-1), result[i-1], result.slice(i+2));
+        i = i - 1;
+      }
+    }
+    //fourth
+    if (result[i] == '--discard-prev'){
+      if (typeof(result[i-1]) == 'number'){
+        result = [].concat(result.slice(0, i-1), result.slice(i+1));
+        i = i - 1;
+      }
+    }
+  }
+  return result;
 }
 
 module.exports = {
