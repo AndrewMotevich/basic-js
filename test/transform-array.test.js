@@ -36,7 +36,7 @@ describe('Transform array', () => {
                 () => transform(false),
                 () => transform(null),
                 () => transform(undefined),
-                () => transform({ 'foo': 'bar' })
+                () => transform(3.312312)
             ], '\'arr\' parameter must be an instance of the Array!');
 
             assert.strictEqual(res.every($ => $ === CORRECT_RESULT_MSG), true);
